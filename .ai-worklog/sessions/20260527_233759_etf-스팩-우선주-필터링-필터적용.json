@@ -1,0 +1,14 @@
+{
+  "session_id": "20260527_233759_etf-스팩-우선주-필터링-필터적용",
+  "title": "ETF / 스팩 / 우선주 필터링 - 필터적용",
+  "git_user_email": "tjrcksgnl@gmail.com",
+  "created_at": "2026-05-27T23:37:59",
+  "prompt_file": ".ai-worklog/prompts/20260527_233759_etf-스팩-우선주-필터링-필터적용.md",
+  "diff_file": ".ai-worklog/diffs/20260527_233759_etf-스팩-우선주-필터링-필터적용.diff",
+  "report_file": ".ai-worklog/reports/20260527_233759_etf-스팩-우선주-필터링-필터적용.md",
+  "status": "committed",
+  "finished_at": "2026-05-27T23:59:00",
+  "changed_files": [],
+  "suggested_commit_message": "[AI] record: ETF/스팩/우선주 필터링 프롬프트 및 레포트 기록",
+  "commit_message": "급등 종목 필터링 적용"
+}
