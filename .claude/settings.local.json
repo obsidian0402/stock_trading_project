@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(PYTHONIOENCODING=utf-8 printf \"[목표]\\\\n워크플로우 자동기록 동작 확인\\\\n\\\\n[프롬프트]\\\\nai_record.py가 prompt.md를 올바르게 갱신하는지 테스트\\\\n\")",
-      "Bash(PYTHONIOENCODING=utf-8 python scripts/ai_record.py --from-stdin)"
+      "Bash(PYTHONIOENCODING=utf-8 python scripts/ai_record.py --from-stdin)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
