@@ -6,7 +6,7 @@
   "prompt_file": ".ai-worklog/prompts/20260527_225511_test.md",
   "diff_file": ".ai-worklog/diffs/20260527_225511_test.diff",
   "report_file": ".ai-worklog/reports/20260527_225511_test.md",
-  "status": "finished",
+  "status": "committed",
   "finished_at": "2026-05-27T23:07:01",
   "changed_files": [
     ".ai-worklog/prompts/20260527_225511_test.md",
@@ -25,5 +25,6 @@
     "scripts/ai_record.py",
     "scripts/ai_start.py"
   ],
-  "suggested_commit_message": "[AI] modify: 20260527_225511_test.md, 20260527_225511_test.json, settings.json, settings.local.json, .gitignore (+10 more)"
+  "suggested_commit_message": "[AI] modify: 20260527_225511_test.md, 20260527_225511_test.json, settings.json, settings.local.json, .gitignore (+10 more)",
+  "commit_message": "프롬프트 자동화 v1.0 테스트"
 }
