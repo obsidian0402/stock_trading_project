@@ -1,0 +1,17 @@
+# AI worklog: keep prompts/sessions/reports, ignore raw diffs (potentially large/binary)
+.ai-worklog/diffs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
