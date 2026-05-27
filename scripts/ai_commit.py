@@ -170,21 +170,29 @@ def main() -> int:
         print("커밋을 취소했습니다.")
         return 1
 
-    code, out, err = run_git(["commit", "-m", commit_message])
-    if code != 0:
-        print(f"Error: git commit 실패: {err.strip() or out.strip()}")
-        print("초보자 안내: 'nothing to commit'이라면 변경사항이 staged되지 않은 것입니다.")
-        return 1
-
-    print(out.strip())
-    print("커밋이 완료되었습니다.")
-
+    # Update status BEFORE committing so the session file is included in the commit
     metadata["status"] = "committed"
     metadata["commit_message"] = commit_message
     session_file.write_text(
         json.dumps(metadata, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    run_git(["add", str(session_file.relative_to(PROJECT_ROOT)).replace("\\", "/")])
+
+    code, out, err = run_git(["commit", "-m", commit_message])
+    if code != 0:
+        metadata["status"] = "finished"
+        del metadata["commit_message"]
+        session_file.write_text(
+            json.dumps(metadata, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        print(f"Error: git commit 실패: {err.strip() or out.strip()}")
+        print("초보자 안내: 'nothing to commit'이라면 변경사항이 staged되지 않은 것입니다.")
+        return 1
+
+    print(out.strip())
+    print("커밋이 완료되었습니다.")
     return 0
 
 
