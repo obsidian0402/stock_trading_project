@@ -19,9 +19,15 @@ Each session links:
 
 ### Quick start
 
-```bash
-python scripts/ai_start.py    # 세션 시작 + 프롬프트 파일 생성
-# (생성된 프롬프트 파일 작성 → Claude CLI로 코드 작업)
-python scripts/ai_finish.py   # diff 캡처 + 리포트 생성
-python scripts/ai_commit.py   # 검토 후 commit
+```powershell
+# (1회) 프로젝트 루트에서 명령어를 어디서든 쓸 수 있게 PATH 등록
+.\scripts\install_ai_path.ps1
+
+# 세션 흐름
+ai_start              # 세션 시작 + 프롬프트 파일 생성
+# (프롬프트 파일 작성 → Claude CLI로 코드 작업)
+ai_finish             # diff 캡처 + 리포트 생성
+ai_commit             # 검토 후 git commit
 ```
+
+PATH를 등록하지 않더라도 프로젝트 루트에서 `.\ai_start` 처럼 호출할 수 있습니다.

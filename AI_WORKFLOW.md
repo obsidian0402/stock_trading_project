@@ -5,11 +5,77 @@
 
 ---
 
+## 0. 명령어 형태로 사용하기 (권장)
+
+프로젝트 루트에 다음 4개의 `.cmd` 래퍼가 들어 있습니다.
+
+- `ai_start.cmd`
+- `ai_finish.cmd`
+- `ai_commit.cmd`
+- `ai_record.cmd`
+
+각 래퍼는 자동으로 `PYTHONUTF8=1` / `PYTHONIOENCODING=utf-8` / `chcp 65001` 을 설정하므로
+**한글 입출력이 깨지지 않습니다.**
+
+### A. 프로젝트 루트에서만 사용
+
+PowerShell에서:
+```powershell
+.\ai_start
+.\ai_finish
+.\ai_commit
+```
+cmd에서:
+```
+ai_start
+ai_finish
+ai_commit
+```
+
+### B. 어디서든 사용 (PATH 등록, 1회 설치)
+
+프로젝트 루트에서 다음 중 **하나** 를 실행:
+
+```powershell
+.\install_ai_path             # 권장 (PowerShell 실행 정책 영향 없음)
+```
+또는
+```
+install_ai_path               # cmd에서도 동일
+```
+
+> `install_ai_path.cmd` 는 PowerShell을 `-ExecutionPolicy Bypass` 로 한 번만 띄워서 설치 스크립트를 실행합니다. 사용자 시스템의 실행 정책을 영구적으로 바꾸지 않습니다.
+
+이후 **새 터미널** 을 열면 어느 폴더에서나 다음 명령이 동작합니다.
+```powershell
+ai_start
+ai_finish
+ai_commit
+ai_record --help
+```
+되돌리려면:
+```powershell
+.\install_ai_path -Remove
+```
+
+> 사용자(User) PATH에만 추가되며 시스템(System) PATH에는 손대지 않습니다. 관리자 권한 불필요.
+
+#### 만약 실행 정책 오류가 떴다면
+
+이미 `install_ai_path.cmd` 가 정책 우회를 처리하므로 그걸 쓰면 됩니다. 굳이 정책 자체를 바꾸고 싶다면 한 번만:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+(현재 사용자만 적용, 시스템 전체엔 영향 없음. 일반적으로 권장되는 설정값)
+
+---
+
 ## 1. 작업 시작
 
-```bash
-python scripts/ai_start.py
+```powershell
+ai_start
 ```
+(혹은 직접 호출: `python scripts/ai_start.py`)
 
 - 작업 제목을 입력하면 `YYYYMMDD_HHMMSS_slug` 형식의 세션 ID가 생성됩니다.
 - 다음 두 파일이 만들어집니다.
@@ -28,9 +94,10 @@ Claude CLI에서 위 프롬프트로 실제 코드 수정을 진행합니다.
 
 ## 4. 작업 종료 및 변경 이력 저장
 
-```bash
-python scripts/ai_finish.py
+```powershell
+ai_finish
 ```
+(직접 호출: `python scripts/ai_finish.py`)
 
 - 가장 최근 세션을 자동으로 찾습니다.
 - `git diff` 결과를 `.ai-worklog/diffs/{세션ID}.diff`로 저장합니다.
@@ -64,26 +131,27 @@ Claude는 이 형식을 인식하면 다음을 자동 실행합니다.
 2. 프롬프트에 요청된 코드 작업 수행
 3. `python scripts/ai_finish.py`를 실행해 diff/리포트 생성
 
-수동 호출이 필요할 때는 헬퍼 스크립트를 직접 써도 됩니다.
+수동 호출이 필요할 때는 헬퍼 명령(또는 스크립트)을 직접 써도 됩니다.
 
-```bash
+```powershell
 # stdin으로 입력하기
-python scripts/ai_record.py --from-stdin
+ai_record --from-stdin
 
 # 또는 인자로
-python scripts/ai_record.py --goal "..." --prompt "..."
+ai_record --goal "..." --prompt "..."
 
 # 또는 파일로
-python scripts/ai_record.py --goal-file goal.txt --prompt-file prompt.txt
+ai_record --goal-file goal.txt --prompt-file prompt.txt
 ```
 
 옵션: `--session 세션ID` 로 특정 세션 지정, `--append` 로 덮어쓰지 않고 이어쓰기.
 
 ## 6. 커밋
 
-```bash
-python scripts/ai_commit.py
+```powershell
+ai_commit
 ```
+(직접 호출: `python scripts/ai_commit.py`)
 
 - 변경 파일 목록을 보여줍니다.
 - `git add .` 여부, 커밋 메시지를 묻습니다(비워두면 리포트의 Suggested Commit Message 사용).

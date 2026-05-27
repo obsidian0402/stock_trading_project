@@ -5,7 +5,9 @@
       "Bash(PYTHONIOENCODING=utf-8 python scripts/ai_record.py --from-stdin)",
       "Bash(git config *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(cmd.exe /c ai_record.cmd --help)",
+      "PowerShell(& \"C:\\\\stock_trading_project\\\\ai_record.cmd\" --help)"
     ]
   }
 }
