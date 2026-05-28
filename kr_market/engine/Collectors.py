@@ -153,7 +153,11 @@ def _calc_ma(closes: list[float], period: int) -> list[float | None]:
     return result
 
 
-def get_chart_data(code: str, days: int = 60) -> list[dict]:
+def get_chart_data(
+    code: str, days: int = 60, config: SignalConfig | None = None
+) -> list[dict]:
+    ma_periods = config.ma_periods if config else [5, 10, 20]
+
     headers = {
         **HEADERS,
         "Referer": f"https://finance.naver.com/item/sise.naver?code={code}",
@@ -208,16 +212,49 @@ def get_chart_data(code: str, days: int = 60) -> list[dict]:
     rows.reverse()  # 최신순 → 오래된 순 (시계열 순서)
 
     closes = [r["close"] for r in rows]
-    ma5 = _calc_ma(closes, 5)
-    ma10 = _calc_ma(closes, 10)
-    ma20 = _calc_ma(closes, 20)
-
-    for i, row in enumerate(rows):
-        row["ma5"] = ma5[i]
-        row["ma10"] = ma10[i]
-        row["ma20"] = ma20[i]
+    for period in ma_periods:
+        ma_values = _calc_ma(closes, period)
+        for i, row in enumerate(rows):
+            row[f"ma{period}"] = ma_values[i]
 
     return rows
+
+
+def analyze_chart(code: str, config: SignalConfig | None = None) -> dict:
+    """config.annual_days 기간 데이터로 정배열 여부 및 연간 고저가를 계산한다."""
+    ma_periods = config.ma_periods if config else [5, 10, 20]
+    annual_days = config.annual_days if config else 252
+
+    data = get_chart_data(code, days=annual_days, config=config)
+
+    result: dict = {
+        "code": code,
+        "is_golden": None,
+        "w52_high": None,
+        "w52_low": None,
+        "pct_from_high": None,
+        **{f"ma{p}": None for p in ma_periods},
+    }
+
+    if not data:
+        return result
+
+    latest = data[-1]
+    ma_values = [latest.get(f"ma{p}") for p in ma_periods]
+
+    for p, v in zip(ma_periods, ma_values):
+        result[f"ma{p}"] = v
+
+    # 정배열: 짧은 MA > 긴 MA 순서로 모두 내림차순이어야 함
+    result["is_golden"] = all(v is not None for v in ma_values) and all(
+        ma_values[i] > ma_values[i + 1] for i in range(len(ma_values) - 1)
+    )
+
+    result["w52_high"] = max(d["high"] for d in data)
+    result["w52_low"] = min(d["low"] for d in data)
+    result["pct_from_high"] = round(latest["close"] / result["w52_high"] * 100, 1)
+
+    return result
 
 
 if __name__ == "__main__":

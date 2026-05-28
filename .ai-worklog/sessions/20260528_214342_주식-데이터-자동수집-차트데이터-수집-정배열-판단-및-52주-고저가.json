@@ -1,0 +1,20 @@
+{
+  "session_id": "20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가",
+  "title": "주식 데이터 자동수집 - 차트데이터 수집 - 정배열 판단 및 52주 고저가",
+  "git_user_email": "tjrcksgnl@gmail.com",
+  "created_at": "2026-05-28T21:43:42",
+  "prompt_file": ".ai-worklog/prompts/20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가.md",
+  "diff_file": ".ai-worklog/diffs/20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가.diff",
+  "report_file": ".ai-worklog/reports/20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가.md",
+  "status": "committed",
+  "finished_at": "2026-05-28T21:59:00",
+  "changed_files": [
+    ".ai-worklog/prompts/20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가.md",
+    ".ai-worklog/sessions/20260528_214342_주식-데이터-자동수집-차트데이터-수집-정배열-판단-및-52주-고저가.json",
+    "kr_market/app.py",
+    "kr_market/engine/Collectors.py",
+    "kr_market/engine/config.py"
+  ],
+  "suggested_commit_message": "[AI] add: 정배열 판단 및 연간 고저가 분석 기능 추가 (analyze_chart, config 파라미터화)",
+  "commit_message": "[AI] add: 정배열 판단 및 연간 고저가 분석 기능 추가 (analyze_chart, config 파라미터화)"
+}
