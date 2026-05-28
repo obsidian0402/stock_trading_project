@@ -1,0 +1,19 @@
+{
+  "session_id": "20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터",
+  "title": "주식 데이터 자동수집 - 차트데이터수집 - 60일 일봉 및 이동평균선 데이터",
+  "git_user_email": "tjrcksgnl@gmail.com",
+  "created_at": "2026-05-28T21:28:55",
+  "prompt_file": ".ai-worklog/prompts/20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터.md",
+  "diff_file": ".ai-worklog/diffs/20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터.diff",
+  "report_file": ".ai-worklog/reports/20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터.md",
+  "status": "committed",
+  "finished_at": "2026-05-28T21:32:37",
+  "changed_files": [
+    ".ai-worklog/prompts/20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터.md",
+    ".ai-worklog/sessions/20260528_212855_주식-데이터-자동수집-차트데이터수집-60일-일봉-및-이동평균선-데이터.json",
+    "kr_market/engine/Collectors.py",
+    "scripts/ai_finish.py"
+  ],
+  "suggested_commit_message": "[AI] add: get_chart_data 함수 추가 - 60일 일봉 및 MA5/MA10/MA20 계산",
+  "commit_message": "[AI] add: get_chart_data 함수 추가 - 60일 일봉 및 MA5/MA10/MA20 계산"
+}

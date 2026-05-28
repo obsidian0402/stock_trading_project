@@ -89,15 +89,16 @@ def collect_changed_files() -> list[str]:
     """Return a sorted unique list of changed file paths (tracked + untracked)."""
     files: set[str] = set()
 
-    code, out, _ = run_git(["diff", "--name-only"])
+    # core.quotepath=false: 한글 파일명을 octal 인코딩 없이 UTF-8 그대로 반환
+    code, out, _ = run_git(["-c", "core.quotepath=false", "diff", "--name-only"])
     if code == 0:
         files.update(line.strip() for line in out.splitlines() if line.strip())
 
-    code, out, _ = run_git(["diff", "--name-only", "--cached"])
+    code, out, _ = run_git(["-c", "core.quotepath=false", "diff", "--name-only", "--cached"])
     if code == 0:
         files.update(line.strip() for line in out.splitlines() if line.strip())
 
-    code, out, _ = run_git(["ls-files", "--others", "--exclude-standard"])
+    code, out, _ = run_git(["-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"])
     if code == 0:
         files.update(line.strip() for line in out.splitlines() if line.strip())
 
@@ -138,17 +139,17 @@ def main() -> int:
         diff_text = ""
         changed_files: list[str] = []
     else:
-        code, diff_text, err = run_git(["diff", "HEAD"])
+        code, diff_text, err = run_git(["-c", "core.quotepath=false", "diff", "HEAD"])
         if code != 0:
             # 초기 커밋이 아직 없을 때는 HEAD가 없으므로 staged + unstaged 영역만 비교
-            code2, diff_text, err2 = run_git(["diff"])
+            code2, diff_text, err2 = run_git(["-c", "core.quotepath=false", "diff"])
             if code2 != 0:
                 print(f"Error: git diff 실행 실패: {err.strip() or err2.strip()}")
                 return 1
 
-        code, diff_stat, err = run_git(["diff", "--stat", "HEAD"])
+        code, diff_stat, err = run_git(["-c", "core.quotepath=false", "diff", "--stat", "HEAD"])
         if code != 0:
-            code2, diff_stat, _ = run_git(["diff", "--stat"])
+            code2, diff_stat, _ = run_git(["-c", "core.quotepath=false", "diff", "--stat"])
             if code2 != 0:
                 diff_stat = "(git diff --stat failed)"
 

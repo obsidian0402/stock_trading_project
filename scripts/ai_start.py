@@ -75,7 +75,7 @@ def is_git_repo() -> bool:
 
 def has_uncommitted_changes() -> bool:
     result = subprocess.run(
-        ["git", "status", "--porcelain"],
+        ["git", "-c", "core.quotepath=false", "status", "--porcelain"],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,

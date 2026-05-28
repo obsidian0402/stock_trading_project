@@ -6,6 +6,7 @@ from engine.config import SignalConfig
 
 
 NAVER_RISE_URL = "https://finance.naver.com/sise/sise_rise.naver"
+NAVER_CHART_URL = "https://finance.naver.com/item/sise_day.naver"
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -140,6 +141,83 @@ def get_top_gainers(
 
     except Exception as e:
         raise RuntimeError(f"파싱 실패: {e}") from e
+
+
+def _calc_ma(closes: list[float], period: int) -> list[float | None]:
+    result: list[float | None] = []
+    for i in range(len(closes)):
+        if i + 1 < period:
+            result.append(None)
+        else:
+            result.append(round(sum(closes[i + 1 - period: i + 1]) / period, 2))
+    return result
+
+
+def get_chart_data(code: str, days: int = 60) -> list[dict]:
+    headers = {
+        **HEADERS,
+        "Referer": f"https://finance.naver.com/item/sise.naver?code={code}",
+    }
+    rows: list[dict] = []
+    page = 1
+
+    while len(rows) < days:
+        try:
+            response = requests.get(
+                NAVER_CHART_URL,
+                params={"code": code, "page": page},
+                headers=headers,
+                timeout=10,
+            )
+            response.raise_for_status()
+        except requests.RequestException as e:
+            raise RuntimeError(f"네이버 금융 요청 실패: {e}") from e
+
+        response.encoding = "euc-kr"
+        soup = BeautifulSoup(response.text, "html.parser")
+        table = soup.select_one("table.type2")
+        if table is None:
+            break
+
+        found = 0
+        for tr in table.select("tr"):
+            tds = tr.find_all("td")
+            if len(tds) < 7:
+                continue
+            date_text = tds[0].get_text(strip=True)
+            if not date_text or "." not in date_text:
+                continue
+            try:
+                rows.append({
+                    "date": date_text,
+                    "close": _to_int(tds[1].get_text()),
+                    "open": _to_int(tds[3].get_text()),
+                    "high": _to_int(tds[4].get_text()),
+                    "low": _to_int(tds[5].get_text()),
+                    "volume": _to_int(tds[6].get_text()),
+                })
+                found += 1
+            except (ValueError, IndexError):
+                continue
+
+        if found == 0:
+            break
+        page += 1
+
+    rows = rows[:days]
+    rows.reverse()  # 최신순 → 오래된 순 (시계열 순서)
+
+    closes = [r["close"] for r in rows]
+    ma5 = _calc_ma(closes, 5)
+    ma10 = _calc_ma(closes, 10)
+    ma20 = _calc_ma(closes, 20)
+
+    for i, row in enumerate(rows):
+        row["ma5"] = ma5[i]
+        row["ma10"] = ma10[i]
+        row["ma20"] = ma20[i]
+
+    return rows
 
 
 if __name__ == "__main__":

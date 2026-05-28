@@ -98,7 +98,7 @@ def ensure_git_user_email() -> bool:
 
 
 def show_changed_files() -> list[str]:
-    code, out, _ = run_git(["status", "--porcelain"])
+    code, out, _ = run_git(["-c", "core.quotepath=false", "status", "--porcelain"])
     if code != 0 or not out.strip():
         return []
     lines = [line for line in out.splitlines() if line.strip()]
